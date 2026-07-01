@@ -1,0 +1,2 @@
+﻿risk_level,risk_score,max_loss_per_trade_pct,avg_loss_per_trade_pct,liquidation_rate,funding_fee_ratio,margin_utilization,risk_reward_with_lev,summary
+中,41,2.24,1.08,0.0,0.9,87.29,0.89,杠杆模式风险评估: 中 (评分 41/100) | 发现 1 个严重风险事件 | 发现 1 个警告级风险事件 | 未发生强平事件 | 最大回撤 -37.5% | 使用 10.0x 杠杆 | 策略亏损 35.75%，杠杆放大了亏损
