@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+DOT/USDT,True,10.0,-60.67,39329.9,-97.73,-60670.1,243,80,163,32.92,0.61,-64.44,-3.09,-6.41,124,119,0,86.84,460130.06

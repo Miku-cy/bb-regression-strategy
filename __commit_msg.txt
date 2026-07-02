@@ -1,0 +1,7 @@
+feat: 增加 1m 小周期支持
+
+- 后端: data_downloader.py 添加 1m 到 SUPPORTED_TIMEFRAMES
+- 后端: batch_export.py 增加 1m 数据下载和回测（11币种×无杠杆+10x杠杆）
+- 前端: api.ts getTimeframes() 添加 1m，buildBacktestFromCsv 按 small_timeframe 选择文件
+- 前端: DataManagement.tsx 和 ParameterPanel.tsx 时间周期选项添加 1m
+- 数据: 下载11币种1m K线数据(90天)，生成1m回测结果CSV

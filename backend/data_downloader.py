@@ -29,7 +29,7 @@ SUPPORTED_SYMBOLS = [
 ]
 
 # 支持的时间周期
-SUPPORTED_TIMEFRAMES = ["5m", "15m", "1h", "4h", "1d"]
+SUPPORTED_TIMEFRAMES = ["1m", "5m", "15m", "1h", "4h", "1d"]
 
 
 def _get_working_domain() -> str:

@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+DOGE/USDT,True,10.0,-29.2,70795.43,-75.36,-29204.57,315,116,199,36.83,0.86,-41.58,-1.04,-2.12,152,163,0,-18.9,481892.65

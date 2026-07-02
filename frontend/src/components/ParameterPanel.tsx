@@ -114,6 +114,7 @@ export default function ParameterPanel({ params, onChange, onRunBacktest, onExpo
         <div>
           <label style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', marginBottom: '3px' }}>小周期</label>
           <select className="select" value={params.small_timeframe} onChange={(e) => onChange('small_timeframe', e.target.value as any)}>
+            <option value="1m">1m</option>
             <option value="5m">5m</option>
             <option value="15m">15m</option>
             <option value="30m">30m</option>

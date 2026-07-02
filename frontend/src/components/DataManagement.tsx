@@ -9,9 +9,10 @@ interface DataManagementProps {
 }
 
 const SYMBOLS = ['BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'AVAX/USDT', 'DOT/USDT', 'LINK/USDT', 'LTC/USDT', 'TRX/USDT', 'ATOM/USDT', 'NEAR/USDT'];
-const TIMEFRAMES = ['5m', '15m', '1h', '4h', '1d'];
+const TIMEFRAMES = ['1m', '5m', '15m', '1h', '4h', '1d'];
 
 const TF_LABELS: Record<string, string> = {
+  '1m': '1分钟线',
   '5m': '5分钟线',
   '15m': '15分钟线',
   '30m': '30分钟线',

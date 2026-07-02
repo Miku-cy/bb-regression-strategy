@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+LINK/USDT,False,1,-62.72,37282.7,-99.7,-62717.3,159,46,113,28.93,0.44,-66.85,-4.07,-7.16,82,77,0,0.0,702913.37

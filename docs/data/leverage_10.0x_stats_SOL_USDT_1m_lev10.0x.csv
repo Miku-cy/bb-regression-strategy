@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+SOL/USDT,True,10.0,-73.78,26220.02,-99.56,-73779.98,319,93,226,29.15,0.55,-76.46,-4.36,-8.38,153,166,0,-107.74,449302.72

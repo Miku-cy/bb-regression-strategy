@@ -53,18 +53,27 @@ def export_csv(filename: str, rows: list, fieldnames: list = None):
     print(f"  导出: {filename} ({len(rows)}行)")
 
 
-def run_backtest_for_symbol(symbol: str, use_leverage: bool = False, leverage: float = 10.0):
-    """为指定币种运行回测"""
+def run_backtest_for_symbol(symbol: str, use_leverage: bool = False, leverage: float = 10.0, small_timeframe: str = "5m"):
+    """为指定币种运行回测
+
+    :param small_timeframe: 小周期，支持 '5m' 和 '1m'
+        - '5m' (向后兼容): 文件名无后缀
+        - '1m': 文件名加 '_1m' 后缀
+    """
     sym_file = symbol.replace("/", "_")
+    # 5m保持原命名(向后兼容)，1m加 _1m 后缀
+    sm_suffix = "" if small_timeframe == "5m" else f"_{small_timeframe}"
     prefix = f"leverage_{leverage}x_" if use_leverage else "backtest_"
     lev_suffix = f"_lev{leverage}x" if use_leverage else ""
+    # 完整后缀：1m无杠杆 -> _1m；1m杠杆 -> _1m_lev10.0x
+    full_suffix = f"{sm_suffix}{lev_suffix}"
 
-    print(f"\n=== {symbol} {'杠杆'+str(leverage)+'x' if use_leverage else '无杠杆'} ===")
+    print(f"\n=== {symbol} {'杠杆'+str(leverage)+'x' if use_leverage else '无杠杆'} 小周期={small_timeframe} ===")
 
     # 加载数据检查
     try:
         df_large = load_klines(symbol, "1h")
-        df_small = load_klines(symbol, "5m")
+        df_small = load_klines(symbol, small_timeframe)
     except Exception as e:
         print(f"  跳过: 数据未找到 - {e}")
         return None
@@ -78,7 +87,7 @@ def run_backtest_for_symbol(symbol: str, use_leverage: bool = False, leverage: f
         large_timeframe="1h",
         bb_period=20,
         bb_std=2.0,
-        small_timeframe="5m",
+        small_timeframe=small_timeframe,
         macd_fast=12,
         macd_slow=26,
         macd_signal=9,
@@ -167,19 +176,19 @@ def run_backtest_for_symbol(symbol: str, use_leverage: bool = False, leverage: f
         })
 
     # 导出文件
-    export_csv(f"{prefix}stats_{sym_file}{lev_suffix}.csv", [stats])
-    export_csv(f"{prefix}equity_{sym_file}{lev_suffix}.csv", equity_rows)
-    export_csv(f"{prefix}drawdown_{sym_file}{lev_suffix}.csv", drawdown_rows)
-    export_csv(f"{prefix}trades_{sym_file}{lev_suffix}.csv", trade_rows)
+    export_csv(f"{prefix}stats_{sym_file}{full_suffix}.csv", [stats])
+    export_csv(f"{prefix}equity_{sym_file}{full_suffix}.csv", equity_rows)
+    export_csv(f"{prefix}drawdown_{sym_file}{full_suffix}.csv", drawdown_rows)
+    export_csv(f"{prefix}trades_{sym_file}{full_suffix}.csv", trade_rows)
 
     # 杠杆报告
     if use_leverage:
         report = generate_leverage_report(result)
         report_dict = report_to_dict(report)
-        report_file = DOCS_DATA_DIR / f"leverage_report_{sym_file}{lev_suffix}.json"
+        report_file = DOCS_DATA_DIR / f"leverage_report_{sym_file}{full_suffix}.json"
         with open(report_file, "w", encoding="utf-8") as f:
             json.dump(report_dict, f, ensure_ascii=False, indent=2)
-        print(f"  导出: leverage_report_{sym_file}{lev_suffix}.json")
+        print(f"  导出: leverage_report_{sym_file}{full_suffix}.json")
 
         # 风险事件CSV
         events_rows = []
@@ -191,7 +200,7 @@ def run_backtest_for_symbol(symbol: str, use_leverage: bool = False, leverage: f
                 "description": ev.get("description", ""),
                 "suggestion": ev.get("suggestion", ""),
             })
-        export_csv(f"leverage_events_{sym_file}{lev_suffix}.csv", events_rows)
+        export_csv(f"leverage_events_{sym_file}{full_suffix}.csv", events_rows)
 
     print(f"  完成: 收益{result.total_return:+.2f}% 交易{result.total_trades}笔 胜率{result.win_rate}%")
     return result
@@ -202,10 +211,10 @@ def main():
     print("批量下载多币种数据 + 生成回测结果")
     print("=" * 60)
 
-    # 第1步：下载K线数据
+    # 第1步：下载K线数据（包含1m小周期）
     print("\n[1/3] 下载K线数据...")
     for symbol, sym_file in SYMBOLS:
-        for tf, tf_name, days in [("1h", "1h", 90), ("5m", "5m", 90)]:
+        for tf, tf_name, days in [("1h", "1h", 90), ("5m", "5m", 90), ("1m", "1m", 90)]:
             local_path = BACKEND_DIR.parent / "data" / f"{sym_file}_{tf}.csv"
             if local_path.exists():
                 print(f"  跳过(已存在): {symbol} {tf}")
@@ -220,22 +229,31 @@ def main():
             except Exception as e:
                 print(f"    ✗ 错误: {e}")
 
-    # 第2步：为每个币种运行回测（无杠杆 + 10x杠杆）
+    # 第2步：为每个币种运行回测（5m + 1m 小周期 × 无杠杆 + 10x杠杆）
     print("\n[2/3] 运行回测并导出CSV...")
     all_symbols = [("BTC/USDT", "BTC_USDT")] + SYMBOLS
     for symbol, sym_file in all_symbols:
-        # 检查数据是否存在
+        # 5m小周期回测
         large_path = BACKEND_DIR.parent / "data" / f"{sym_file}_1h.csv"
-        small_path = BACKEND_DIR.parent / "data" / f"{sym_file}_5m.csv"
-        if not large_path.exists() or not small_path.exists():
-            print(f"\n跳过 {symbol}: 缺少K线数据")
-            continue
+        small_5m_path = BACKEND_DIR.parent / "data" / f"{sym_file}_5m.csv"
+        small_1m_path = BACKEND_DIR.parent / "data" / f"{sym_file}_1m.csv"
 
-        # 无杠杆回测
-        run_backtest_for_symbol(symbol, use_leverage=False)
+        if large_path.exists() and small_5m_path.exists():
+            # 5m无杠杆回测
+            run_backtest_for_symbol(symbol, use_leverage=False, small_timeframe="5m")
+            # 5m 10x杠杆回测
+            run_backtest_for_symbol(symbol, use_leverage=True, leverage=10.0, small_timeframe="5m")
+        else:
+            print(f"\n跳过 {symbol} 5m: 缺少K线数据")
 
-        # 10x杠杆回测
-        run_backtest_for_symbol(symbol, use_leverage=True, leverage=10.0)
+        # 1m小周期回测
+        if large_path.exists() and small_1m_path.exists():
+            # 1m无杠杆回测
+            run_backtest_for_symbol(symbol, use_leverage=False, small_timeframe="1m")
+            # 1m 10x杠杆回测
+            run_backtest_for_symbol(symbol, use_leverage=True, leverage=10.0, small_timeframe="1m")
+        else:
+            print(f"\n跳过 {symbol} 1m: 缺少K线数据")
 
     # 第3步：复制K线原始数据到docs/data供下载
     print("\n[3/3] 复制K线原始数据到docs/data...")
@@ -253,7 +271,7 @@ def main():
     kline_files = []
     for f in sorted(DOCS_DATA_DIR.glob("*.csv")):
         # 只列出K线数据（包含_open等字段的）
-        if any(x in f.name for x in ["_1h.csv", "_4h.csv", "_5m.csv", "_15m.csv", "_1d.csv"]):
+        if any(x in f.name for x in ["_1m.csv", "_1h.csv", "_4h.csv", "_5m.csv", "_15m.csv", "_1d.csv"]):
             size_kb = round(f.stat().st_size / 1024, 1)
             # 读取行数
             with open(f, "r", encoding="utf-8") as fp:

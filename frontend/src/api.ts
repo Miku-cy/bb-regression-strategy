@@ -78,10 +78,15 @@ const toNum = (v: string, d = 0): number => {
 const toBool = (v: string): boolean => v === 'true' || v === '1' || v === 'True';
 
 // 从CSV构建BacktestResponse
-// 文件命名规则: backtest_stats_{SYM}.csv / leverage_10.0x_stats_{SYM}_lev10.0x.csv
+// 文件命名规则:
+//   5m小周期(向后兼容): backtest_stats_{SYM}.csv / leverage_10.0x_stats_{SYM}_lev10.0x.csv
+//   1m小周期: backtest_stats_{SYM}_1m.csv / leverage_10.0x_stats_{SYM}_1m_lev10.0x.csv
 // SYM = symbol.replace('/', '_')，例如 BTC/USDT -> BTC_USDT
 async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestResponse> {
   const symFile = params.symbol.replace('/', '_');
+
+  // 小周期后缀：5m保持空(向后兼容)，1m加 _1m
+  const smSuffix = params.small_timeframe === '1m' ? '_1m' : '';
 
   // 根据是否启用杠杆选择文件前缀
   let statsFile: string, equityFile: string, drawdownFile: string, tradesFile: string;
@@ -91,7 +96,7 @@ async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestRes
     const lev = params.leverage || 10;
     const levStr = lev.toFixed(1);
     const p = `leverage_${levStr}x_`;
-    const s = `_lev${levStr}`;
+    const s = `${smSuffix}_lev${levStr}`;
     statsFile = `${p}stats_${symFile}${s}.csv`;
     equityFile = `${p}equity_${symFile}${s}.csv`;
     drawdownFile = `${p}drawdown_${symFile}${s}.csv`;
@@ -99,10 +104,10 @@ async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestRes
     reportFile = `leverage_report_${symFile}${s}.json`;
     eventsFile = `leverage_events_${symFile}${s}.csv`;
   } else {
-    statsFile = `backtest_stats_${symFile}.csv`;
-    equityFile = `backtest_equity_${symFile}.csv`;
-    drawdownFile = `backtest_drawdown_${symFile}.csv`;
-    tradesFile = `backtest_trades_${symFile}.csv`;
+    statsFile = `backtest_stats_${symFile}${smSuffix}.csv`;
+    equityFile = `backtest_equity_${symFile}${smSuffix}.csv`;
+    drawdownFile = `backtest_drawdown_${symFile}${smSuffix}.csv`;
+    tradesFile = `backtest_trades_${symFile}${smSuffix}.csv`;
     reportFile = '';
     eventsFile = '';
   }
@@ -214,7 +219,7 @@ export async function getSymbols(): Promise<string[]> {
 }
 
 export async function getTimeframes(): Promise<string[]> {
-  if (await isCsvMode()) return ['5m', '15m', '30m', '1h', '4h', '1d'];
+  if (await isCsvMode()) return ['1m', '5m', '15m', '30m', '1h', '4h', '1d'];
   const { data } = await api.get('/timeframes');
   return data.timeframes;
 }

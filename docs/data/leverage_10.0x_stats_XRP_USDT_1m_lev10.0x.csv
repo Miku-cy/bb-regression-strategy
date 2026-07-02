@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+XRP/USDT,True,10.0,-72.95,27045.05,-99.5,-72954.95,332,90,242,27.11,0.54,-77.78,-4.25,-7.39,178,154,0,171.29,447557.0
