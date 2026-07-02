@@ -293,7 +293,7 @@ export default function App() {
 
           {tab === 'data' && (
             <div className="fade-in" style={{ maxWidth: '800px' }}>
-              <DataManagement localData={localData} onRefresh={refreshLocalData} />
+              <DataManagement localData={localData} onRefresh={refreshLocalData} isDemoMode={isDemoMode} />
             </div>
           )}
 
