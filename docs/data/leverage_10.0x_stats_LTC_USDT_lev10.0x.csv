@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+LTC/USDT,True,10.0,-19.79,80211.94,-59.11,-19788.06,101,44,57,43.56,0.63,-21.3,-1.71,-2.54,50,51,0,-65.04,453403.43

@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+ETH/USDT,False,1,-35.19,64807.15,-82.78,-35192.85,104,44,60,42.31,0.45,-36.61,-3.11,-4.72,52,52,0,0.0,1035033.93

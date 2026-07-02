@@ -1,0 +1,163 @@
+[
+  {
+    "file": "ADA_USDT_1h.csv",
+    "symbol": "ADA/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 153.8
+  },
+  {
+    "file": "ADA_USDT_5m.csv",
+    "symbol": "ADA/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1815.1
+  },
+  {
+    "file": "AVAX_USDT_1h.csv",
+    "symbol": "AVAX/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 139.4
+  },
+  {
+    "file": "AVAX_USDT_5m.csv",
+    "symbol": "AVAX/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1641.5
+  },
+  {
+    "file": "BNB_USDT_1h.csv",
+    "symbol": "BNB/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 151.3
+  },
+  {
+    "file": "BNB_USDT_5m.csv",
+    "symbol": "BNB/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1787.0
+  },
+  {
+    "file": "BTC_USDT_1h.csv",
+    "symbol": "BTC/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 169.6
+  },
+  {
+    "file": "BTC_USDT_4h.csv",
+    "symbol": "BTC/USDT",
+    "timeframe": "4h",
+    "rows": 2192,
+    "size_kb": 176.6
+  },
+  {
+    "file": "BTC_USDT_5m.csv",
+    "symbol": "BTC/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 2007.1
+  },
+  {
+    "file": "DOGE_USDT_1h.csv",
+    "symbol": "DOGE/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 164.0
+  },
+  {
+    "file": "DOGE_USDT_5m.csv",
+    "symbol": "DOGE/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1935.2
+  },
+  {
+    "file": "DOT_USDT_1h.csv",
+    "symbol": "DOT/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 144.8
+  },
+  {
+    "file": "DOT_USDT_5m.csv",
+    "symbol": "DOT/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1703.3
+  },
+  {
+    "file": "ETH_USDT_1h.csv",
+    "symbol": "ETH/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 162.5
+  },
+  {
+    "file": "ETH_USDT_5m.csv",
+    "symbol": "ETH/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1921.0
+  },
+  {
+    "file": "LINK_USDT_1h.csv",
+    "symbol": "LINK/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 140.0
+  },
+  {
+    "file": "LINK_USDT_5m.csv",
+    "symbol": "LINK/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1648.1
+  },
+  {
+    "file": "LTC_USDT_1h.csv",
+    "symbol": "LTC/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 143.9
+  },
+  {
+    "file": "LTC_USDT_5m.csv",
+    "symbol": "LTC/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1695.5
+  },
+  {
+    "file": "SOL_USDT_1h.csv",
+    "symbol": "SOL/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 145.8
+  },
+  {
+    "file": "SOL_USDT_5m.csv",
+    "symbol": "SOL/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1719.3
+  },
+  {
+    "file": "XRP_USDT_1h.csv",
+    "symbol": "XRP/USDT",
+    "timeframe": "1h",
+    "rows": 2168,
+    "size_kb": 153.5
+  },
+  {
+    "file": "XRP_USDT_5m.csv",
+    "symbol": "XRP/USDT",
+    "timeframe": "5m",
+    "rows": 26000,
+    "size_kb": 1812.2
+  }
+]

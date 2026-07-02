@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+AVAX/USDT,False,1,-37.0,63004.67,-84.64,-36995.33,107,36,71,33.64,0.44,-39.81,-3.31,-5.03,48,59,0,0.0,454170.53

@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+ADA/USDT,True,10.0,-27.27,72726.06,-72.52,-27273.94,100,39,61,39.0,0.57,-31.17,-2.17,-3.34,48,52,0,71.82,471084.29

@@ -78,22 +78,49 @@ const toNum = (v: string, d = 0): number => {
 const toBool = (v: string): boolean => v === 'true' || v === '1' || v === 'True';
 
 // 从CSV构建BacktestResponse
+// 文件命名规则: backtest_stats_{SYM}.csv / leverage_10.0x_stats_{SYM}_lev10.0x.csv
+// SYM = symbol.replace('/', '_')，例如 BTC/USDT -> BTC_USDT
 async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestResponse> {
-  const prefix = params.use_leverage ? 'leverage' : 'backtest';
+  const symFile = params.symbol.replace('/', '_');
 
+  // 根据是否启用杠杆选择文件前缀
+  let statsFile: string, equityFile: string, drawdownFile: string, tradesFile: string;
+  let reportFile: string, eventsFile: string;
+
+  if (params.use_leverage) {
+    const lev = params.leverage || 10;
+    const levStr = lev.toFixed(1);
+    const p = `leverage_${levStr}x_`;
+    const s = `_lev${levStr}`;
+    statsFile = `${p}stats_${symFile}${s}.csv`;
+    equityFile = `${p}equity_${symFile}${s}.csv`;
+    drawdownFile = `${p}drawdown_${symFile}${s}.csv`;
+    tradesFile = `${p}trades_${symFile}${s}.csv`;
+    reportFile = `leverage_report_${symFile}${s}.json`;
+    eventsFile = `leverage_events_${symFile}${s}.csv`;
+  } else {
+    statsFile = `backtest_stats_${symFile}.csv`;
+    equityFile = `backtest_equity_${symFile}.csv`;
+    drawdownFile = `backtest_drawdown_${symFile}.csv`;
+    tradesFile = `backtest_trades_${symFile}.csv`;
+    reportFile = '';
+    eventsFile = '';
+  }
+
+  // 并行加载所有CSV
   const [statsRows, equityRows, drawdownRows, tradeRows] = await Promise.all([
-    fetchCsv(`${prefix}_stats.csv`),
-    fetchCsv(`${prefix}_equity.csv`),
-    fetchCsv(`${prefix}_drawdown.csv`),
-    fetchCsv(`${prefix}_trades.csv`),
+    fetchCsv(statsFile),
+    fetchCsv(equityFile),
+    fetchCsv(drawdownFile),
+    fetchCsv(tradesFile),
   ]);
 
-  const s = statsRows[0];
+  const s = statsRows[0] || {};
   const result = {
-    symbol: s.symbol || 'BTC/USDT',
+    symbol: s.symbol || params.symbol,
     start_date: s.start_date || '',
     end_date: s.end_date || '',
-    initial_capital: toNum(s.initial_capital),
+    initial_capital: toNum(s.initial_capital, 100000),
     final_capital: toNum(s.final_capital),
     total_return: toNum(s.total_return),
     total_pnl: toNum(s.total_pnl),
@@ -118,10 +145,10 @@ async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestRes
     leverage: toNum(s.leverage, 1),
     liquidation_count: toNum(s.liquidation_count, 0),
     total_funding_fees: toNum(s.total_funding_fees),
-    total_liquidation_fees: toNum(s.total_liquidation_fees),
+    total_liquidation_fees: toNum(s.total_liquidation_fees, 0),
     max_position_value: toNum(s.max_position_value),
-    avg_margin_used: toNum(s.avg_margin_used),
-    max_margin_used: toNum(s.max_margin_used),
+    avg_margin_used: toNum(s.avg_margin_used, 0),
+    max_margin_used: toNum(s.max_margin_used, 0),
     leverage_amplification: toNum(s.leverage_amplification, 1),
     risk_per_trade_pct: toNum(s.risk_per_trade_pct),
     equity_curve: equityRows.map(r => ({ datetime: r.datetime, equity: toNum(r.equity) })),
@@ -131,61 +158,38 @@ async function buildBacktestFromCsv(params: StrategyParams): Promise<BacktestRes
       exit_time: t.exit_time || null,
       entry_price: toNum(t.entry_price),
       exit_price: t.exit_price ? toNum(t.exit_price) : null,
-      direction: t.direction as 'long' | 'short',
+      direction: (t.side || t.direction) as 'long' | 'short',
       size: toNum(t.size),
-      stop_loss: toNum(t.stop_loss),
-      initial_stop: toNum(t.initial_stop),
-      take_profit_1: toNum(t.take_profit_1),
+      stop_loss: toNum(t.stop_loss, 0),
+      initial_stop: toNum(t.initial_stop, 0),
+      take_profit_1: toNum(t.take_profit_1, 0),
       pnl: toNum(t.pnl),
-      pnl_pct: toNum(t.pnl_pct),
-      rr: toNum(t.rr),
-      exit_reason: t.exit_reason,
+      pnl_pct: toNum(t.return_pct || t.pnl_pct),
+      rr: toNum(t.rr, 0),
+      exit_reason: t.exit_reason || '',
       tp1_hit: toBool(t.tp1_hit),
       breakeven_set: toBool(t.breakeven_set),
       signal_strength: toNum(t.signal_strength, 1),
       leverage: toNum(t.leverage, 1),
       margin: toNum(t.margin),
-      position_value: toNum(t.position_value),
-      liquidation_price: toNum(t.liquidation_price),
-      funding_fees: toNum(t.funding_fees),
-      liquidation_fee: toNum(t.liquidation_fee),
+      position_value: toNum(t.position_value, 0),
+      liquidation_price: toNum(t.liquidation_price, 0),
+      funding_fees: toNum(t.funding_fees, 0),
+      liquidation_fee: toNum(t.liquidation_fee, 0),
       is_liquidated: toBool(t.is_liquidated),
-      margin_ratio_at_entry: toNum(t.margin_ratio_at_entry),
+      margin_ratio_at_entry: toNum(t.margin_ratio_at_entry, 0),
       mmr_tier: toNum(t.mmr_tier, 1),
     })),
   };
 
-  // 尝试加载杠杆报告
+  // 尝试加载杠杆报告（JSON格式）
   let leverageReport = null;
-  if (params.use_leverage) {
+  if (params.use_leverage && reportFile) {
     try {
-      const [summaryRows, eventRows, recRows] = await Promise.all([
-        fetchCsv('leverage_summary.csv'),
-        fetchCsv('leverage_events.csv'),
-        fetchCsv('leverage_recommendations.csv'),
-      ]);
-      const ls = summaryRows[0] || {};
-      leverageReport = {
-        risk_level: ls.risk_level || '中',
-        risk_score: toNum(ls.risk_score),
-        max_loss_per_trade_pct: toNum(ls.max_loss_per_trade_pct),
-        avg_loss_per_trade_pct: toNum(ls.avg_loss_per_trade_pct),
-        liquidation_rate: toNum(ls.liquidation_rate),
-        funding_fee_ratio: toNum(ls.funding_fee_ratio),
-        margin_utilization: toNum(ls.margin_utilization),
-        risk_reward_with_lev: toNum(ls.risk_reward_with_lev),
-        events: eventRows.map(e => ({
-          severity: e.severity as 'critical' | 'warning' | 'info',
-          category: e.category,
-          title: e.title,
-          description: e.description,
-          trade_index: toNum(e.trade_index, -1),
-          value: toNum(e.value),
-          suggestion: e.suggestion,
-        })),
-        summary: ls.summary || '',
-        recommendations: recRows.map(r => r.recommendation),
-      };
+      const resp = await fetch(CSV_BASE + reportFile);
+      if (resp.ok) {
+        leverageReport = await resp.json();
+      }
     } catch {
       // 杠杆报告加载失败，忽略
     }
@@ -217,17 +221,23 @@ export async function getTimeframes(): Promise<string[]> {
 
 export async function getLocalData(): Promise<LocalDataItem[]> {
   if (await isCsvMode()) {
+    // CSV演示模式：从 kline_manifest.json 加载所有可用的K线数据
     try {
-      const rows = await fetchCsv('local_data.csv');
-      return rows.map(r => ({
-        symbol: r.symbol,
-        timeframe: r.timeframe,
-        file: r.file,
-        size_kb: toNum(r.size_kb),
-      }));
+      const resp = await fetch(CSV_BASE + 'kline_manifest.json');
+      if (resp.ok) {
+        const items = await resp.json();
+        return items.map((item: any) => ({
+          symbol: item.symbol,
+          timeframe: item.timeframe,
+          file: item.file,
+          size_kb: item.size_kb,
+          rows: item.rows,
+        }));
+      }
     } catch {
-      return [];
+      // 忽略
     }
+    return [];
   }
   const { data } = await api.get('/local-data');
   return data.data;

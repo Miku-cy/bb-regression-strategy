@@ -145,4 +145,5 @@ export interface LocalDataItem {
   timeframe: string;
   file: string;
   size_kb: number;
+  rows?: number;
 }

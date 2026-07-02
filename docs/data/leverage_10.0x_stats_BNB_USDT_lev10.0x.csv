@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+BNB/USDT,True,10.0,-14.36,85640.11,-46.67,-14359.89,103,46,57,44.66,0.71,-21.39,-1.24,-1.82,48,55,0,-104.07,484366.72

@@ -1,0 +1,2 @@
+symbol,use_leverage,leverage,total_return,final_capital,annual_return,total_pnl,total_trades,win_trades,loss_trades,win_rate,profit_factor,max_drawdown,sharpe_ratio,sortino_ratio,long_trades,short_trades,liquidation_count,total_funding_fees,max_position_value
+BTC/USDT,False,1,-36.33,63671.16,-83.97,-36328.84,105,38,67,36.19,0.5,-38.06,-2.79,-4.5,52,53,0,0.0,1215638.4
