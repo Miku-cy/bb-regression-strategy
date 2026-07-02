@@ -63,6 +63,13 @@
     "size_kb": 10.1
   },
   {
+    "file": "backtest_drawdown_BTC_USDT_1m.csv",
+    "symbol": "backtest/drawdown/BTC/USDT",
+    "timeframe": "1m",
+    "rows": 310,
+    "size_kb": 9.6
+  },
+  {
     "file": "backtest_drawdown_DOGE_USDT_1m.csv",
     "symbol": "backtest/drawdown/DOGE/USDT",
     "timeframe": "1m",
@@ -133,6 +140,13 @@
     "size_kb": 10.8
   },
   {
+    "file": "backtest_equity_BTC_USDT_1m.csv",
+    "symbol": "backtest/equity/BTC/USDT",
+    "timeframe": "1m",
+    "rows": 310,
+    "size_kb": 10.2
+  },
+  {
     "file": "backtest_equity_DOGE_USDT_1m.csv",
     "symbol": "backtest/equity/DOGE/USDT",
     "timeframe": "1m",
@@ -198,6 +212,13 @@
   {
     "file": "backtest_stats_BNB_USDT_1m.csv",
     "symbol": "backtest/stats/BNB/USDT",
+    "timeframe": "1m",
+    "rows": 1,
+    "size_kb": 0.4
+  },
+  {
+    "file": "backtest_stats_BTC_USDT_1m.csv",
+    "symbol": "backtest/stats/BTC/USDT",
     "timeframe": "1m",
     "rows": 1,
     "size_kb": 0.4
@@ -271,6 +292,13 @@
     "timeframe": "1m",
     "rows": 327,
     "size_kb": 42.4
+  },
+  {
+    "file": "backtest_trades_BTC_USDT_1m.csv",
+    "symbol": "backtest/trades/BTC/USDT",
+    "timeframe": "1m",
+    "rows": 308,
+    "size_kb": 40.6
   },
   {
     "file": "backtest_trades_DOGE_USDT_1m.csv",

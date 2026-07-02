@@ -1,0 +1,37 @@
+{
+  "risk_level": "高",
+  "risk_score": 61,
+  "max_loss_per_trade_pct": 2.4,
+  "avg_loss_per_trade_pct": 0.7,
+  "liquidation_rate": 0.0,
+  "funding_fee_ratio": 0.39,
+  "margin_utilization": 99.22,
+  "risk_reward_with_lev": 1.26,
+  "events": [
+    {
+      "severity": "critical",
+      "category": "concentration",
+      "title": "连续亏损 13 笔",
+      "description": "从第181笔开始连续亏损 13 笔\n累计亏损: -7159.18 USDT (7.16% 本金)\n在杠杆模式下，连续亏损会导致保证金快速消耗，增加爆仓风险",
+      "trade_index": -1,
+      "value": 0.0,
+      "suggestion": "连续 13 笔亏损表明策略可能进入失效期。建议: ①暂停交易 ②减小仓位 ③检查市场环境是否变化"
+    },
+    {
+      "severity": "critical",
+      "category": "operation",
+      "title": "保证金利用率过高 (99.2%)",
+      "description": "最大占用保证金: 99223.66 USDT\n占初始资金: 99.2%\n保证金利用率过高时，小幅波动即可能触发强平",
+      "trade_index": -1,
+      "value": 0.0,
+      "suggestion": "保证金利用率达 99.2%，建议控制在50%以下。降低杠杆或减小仓位可显著降低爆仓风险。"
+    }
+  ],
+  "summary": "杠杆模式风险评估: 高 (评分 61/100) | 发现 2 个严重风险事件 | 未发生强平事件 | 最大回撤 -80.09% | 使用 10.0x 杠杆 | 策略亏损 79.23%，杠杆放大了亏损",
+  "recommendations": [
+    "🔁 出现连续亏损。建议: ①设置每日最大亏损限额 ②连续亏损3笔后暂停交易 ③检查策略是否失效。",
+    "🏦 保证金利用率过高。建议将保证金利用率控制在50%以下，预留足够资金应对波动。",
+    "📊 最大回撤 -80.09% 过大。建议: ①降低杠杆 ②增加过滤条件 ③分散交易标的。",
+    "💡 通用建议: 杠杆是双刃剑，放大收益也放大亏损。建议先在低杠杆(3-5x)下验证策略有效性，再逐步调整。"
+  ]
+}
